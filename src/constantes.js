@@ -1,5 +1,5 @@
-const canvasWidth = 600;
-const canvasHeight = 600;
+const canvasWidth = 900;
+const canvasHeight = 650;
 const CANVAS_SIZE = { canvasWidth, canvasHeight }; // TODO: transformar esse array em obj
 
 const SNAKE_START = [
