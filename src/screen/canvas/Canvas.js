@@ -37,7 +37,7 @@ function Canvas() {
 
   const movimentarCobra = ({ keyCode }) => { keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]); } 
   
-  const criarMaca = () => apple.map((_, i) => Math.floor(Math.random() * (CANVAS_SIZE.canvasWidth)/SCALE )); // gera um novo lugar para a maça, dentor o canvas size;
+  const criarMaca = () => apple.map((_, i) => Math.floor(Math.random() * (CANVAS_SIZE.canvasHeight + CANVAS_SIZE.canvasWidth)/SCALE )); // gera um novo lugar para a maça, dentor o canvas size;
 
   const verificarColisao = (parteCobra, cobra = snake) => {
     /*
@@ -90,15 +90,8 @@ function Canvas() {
   };
 
   const criaCobra = (snake, context ) => {
-    var cobraImagem = new Image();
-    cobraImagem.addEventListener('load', function() {
-      snake.forEach(([x, y]) => {
-        context.drawImage(cobraImagem, x, y, 1, 1)
-      }); // tamanho
-      // context.drawImage(cobraImagem, apple[0], apple[1], 1, 1); //tamanho
-      
-    }, false);
-    cobraImagem.src = 'https://media.istockphoto.com/vectors/snakeskin-seamless-pattern-realistic-texture-of-snake-or-another-vector-id1129462793?b=1&k=6&m=1129462793&s=612x612&w=0&h=fgLc3wRw2AB5r5LPJC5qqte1BZSopw-woY2Na1UekKA='; // Set source path
+    context.fillStyle = "lightgreen"; //cor da cobra
+    snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1, 50, 50)); // tamanho
   }
 
   const criaMaca = (context, apple) => {
@@ -117,9 +110,10 @@ function Canvas() {
     context.setTransform(SCALE, 0, 0, SCALE, 0, 0);
     context.clearRect(0, 0, CANVAS_SIZE.canvasWidth, CANVAS_SIZE.canvasHeight); // limpa o campo do jogo
 
+    
     criaCobra(snake, context);
     // context.fillStyle = "lightgreen"; //cor da cobra
-    // snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1)); // tamanho
+    // snake.forEach(([x, y]) => context.roundRect(x, y, 1, 1, 50, 50)); // tamanho
       
     criaMaca(context, apple);
     // context.fillStyle =v "red"; // para a maçã
