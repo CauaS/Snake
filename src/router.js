@@ -1,12 +1,12 @@
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from '../src/screen/login/login';
-import Canvas from '../src/screen/canvas/Canvas';
+import Game from '../src/screen/game/game';
 
 function Routes() {
     return(
         <BrowserRouter>
             <Route path="/" component={Login} exact/>
-            <Route path="/canvas" component={Canvas} exact/>
+            <Route path="/game" component={Game} exact/>
         </BrowserRouter>
     );
 }

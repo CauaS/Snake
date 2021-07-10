@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './styles.css';
+
 import { useInterval } from '../../useInterval';
 import {
   APPLE_START,
@@ -126,16 +128,10 @@ function Canvas() {
   
 
   return (
-    <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        flexDirection: 'column',
-    }}>
+    <div>
       <canvas
+        className="canvas"
         style={{
-          display: gameOver ? 'none' : '',
-          border: "1px solid black", 
           backgroundImage:'url(https://media.istockphoto.com/vectors/green-grass-texture-background-vector-id514767984?b=1&k=6&m=514767984&s=612x612&w=0&h=5Z-HKBRKfZG3nP1h4mzClKE7lMHrQmPgXej-5QfpydU=)' 
         }}
         ref={canvasRef}
@@ -143,10 +139,11 @@ function Canvas() {
           height={`${CANVAS_SIZE.canvasHeight}px`}
       />
       {gameOver && <div> Game Over! </div>}
+      {/* <div>
+        <button onClick={iniciarJogo}> Iniciar o jogo</button>
 
-      <button onClick={iniciarJogo}> Iniciar o jogo</button>
-
-      <h1>{score}</h1>
+        <h1>{score}</h1>
+      </div> */}
     </div>
   )
   

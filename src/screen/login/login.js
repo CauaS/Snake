@@ -5,7 +5,7 @@ function Login({ history }) {
     const [apelido, setApelido] = useState('');
 
     function handleSubmit(params) {
-        history.push('/canvas')
+        history.push('/game')
     }
     return (
         <div className="login-container">
