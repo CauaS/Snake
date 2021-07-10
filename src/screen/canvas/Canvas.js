@@ -17,25 +17,22 @@ function Canvas() {
   const [dir, setDir] = useState([0,  -1]); //vai para cima, por que o y = -1
   const [speed, setSpeed] = useState(800);
   const [gameOver, setGameOver] = useState(false);
-  const [startGame, setStartGame] = useState(false);
   const [score, setScore] = useState(0);
 
+  useInterval(() => jogo(), speed);
 
   const iniciarJogo = () => {
     setSnake(SNAKE_START);
     setApple(APPLE_START);
     setDir([0, -1]);
     setSpeed(SPEED);
-    setStartGame(true);
     setGameOver(false);
-
     setScore(0);
   }
 
   const finalizarJogo = () => {
     setSpeed(null);
     setGameOver(true);
-    setStartGame(false);
   }
 
   const movimentarCobra = ({ keyCode }) => { keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]); } 
@@ -63,7 +60,8 @@ function Canvas() {
   const veriricarColisaoComMaca = novaCobra => {
     if(novaCobra[0][0] === apple[0] && novaCobra[0][1] === apple[1]){
         setScore(score => score +1);
-        setSpeed(speed => speed  - 100);
+        if(speed !== 100) setSpeed(speed => speed  - 100);
+
         let novaMaca = criarMaca();
 
         //se a nova maça for criada no mesmo lugar que a cobra está;
@@ -92,7 +90,7 @@ function Canvas() {
   };
 
   const criaCobra = (snake, context ) => {
-    var cobraImagem = new Image();   // Create new img element
+    var cobraImagem = new Image();
     cobraImagem.addEventListener('load', function() {
       snake.forEach(([x, y]) => {
         context.drawImage(cobraImagem, x, y, 1, 1)
@@ -104,17 +102,18 @@ function Canvas() {
   }
 
   const criaMaca = (context, apple) => {
-    var macaImagem = new Image();   // Create new img element
+    var macaImagem = new Image();
     macaImagem.addEventListener('load', function() {
       context.drawImage(macaImagem, apple[0], apple[1], 1, 1); //tamanho
       context.restore();
     }, false);
-    macaImagem.src = 'https://i.pinimg.com/originals/a1/ee/97/a1ee9796415e11f066f081f238a3a184.png'; // Set source path
+    macaImagem.src = 'https://i.pinimg.com/originals/a1/ee/97/a1ee9796415e11f066f081f238a3a184.png';
   }
   
   useEffect(() => {
-    const context = canvasRef.current.getContext('2d');
+    window.addEventListener('keydown', movimentarCobra);
     
+    const context = canvasRef.current.getContext('2d');
     context.setTransform(SCALE, 0, 0, SCALE, 0, 0);
     context.clearRect(0, 0, CANVAS_SIZE.canvasWidth, CANVAS_SIZE.canvasHeight); // limpa o campo do jogo
 
@@ -125,40 +124,35 @@ function Canvas() {
     criaMaca(context, apple);
     // context.fillStyle =v "red"; // para a maçã
     // context.fillRect(apple[0], apple[1], 1, 1); //tamanho
+    return () => {
+      window.removeEventListener('keydown', movimentarCobra);
+    };
   }, 
   [snake, apple, gameOver]);
-  useInterval(() => jogo(), speed);
+  
 
   return (
     <div style={{ 
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center',
-        marginTop:'32px'
+        flexDirection: 'column',
     }}>
-      <div 
-        role="button" 
-        tabIndex="0" 
-        onKeyDown={e => movimentarCobra(e)}
-        style={{ display: 'flex', flexDirection: 'column'}}
-      >
-        <canvas
-          style={{
-            display: startGame ? '' : 'none',
-            border: "1px solid black", 
-            backgroundImage:'url(https://media.istockphoto.com/vectors/green-grass-texture-background-vector-id514767984?b=1&k=6&m=514767984&s=612x612&w=0&h=5Z-HKBRKfZG3nP1h4mzClKE7lMHrQmPgXej-5QfpydU=)' 
-          }}
-          ref={canvasRef}
+      <canvas
+        style={{
+          display: gameOver ? 'none' : '',
+          border: "1px solid black", 
+          backgroundImage:'url(https://media.istockphoto.com/vectors/green-grass-texture-background-vector-id514767984?b=1&k=6&m=514767984&s=612x612&w=0&h=5Z-HKBRKfZG3nP1h4mzClKE7lMHrQmPgXej-5QfpydU=)' 
+        }}
+        ref={canvasRef}
           width={`${CANVAS_SIZE.canvasWidth}px`}
           height={`${CANVAS_SIZE.canvasHeight}px`}
-        />
-        {gameOver && <div> Game Over! </div>}
+      />
+      {gameOver && <div> Game Over! </div>}
 
-        { /* Ajustar a visualização desse botão */}
-        <button onClick={iniciarJogo}> Iniciar o jogo</button>
-        
-        <h1>{score}</h1>
-      </div>
+      <button onClick={iniciarJogo}> Iniciar o jogo</button>
+
+      <h1>{score}</h1>
     </div>
   )
   

@@ -1,8 +1,8 @@
 import React from 'react';
-import Canvas from '../src/screen/canvas/Canvas'
+import Routes from '../src/router';
 
 function App() {
-  return <Canvas />
+  return <Routes />
 }
 
 export default App;
