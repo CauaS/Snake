@@ -2,14 +2,17 @@ import React from 'react';
 import './styles.css';
 
 import Canvas from '../canvas/Canvas';
+import { usePontos } from '../../contexts/pontosContext.js';
 
 function Game(){
+    const {pontos} = usePontos();
+    
     return (
         <div className="game-container">
             <div className="pontuacao">
                 <div className="info">
                     <h3>Pontuação</h3>
-                    <h2>2</h2>
+                    <h2>{pontos}</h2>
                 </div>
                 <div className="info">
                     <h3>Objetivo</h3>
