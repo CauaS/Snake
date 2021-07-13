@@ -2,7 +2,7 @@ import React from 'react';
 import './styles.css';
 
 import Canvas from '../canvas/Canvas';
-import { usePontos } from '../../contexts/pontosContext.js';
+import { usePontos } from '../../Contexts/pontosContext.js';
 
 function Game(){
     const {pontos} = usePontos();

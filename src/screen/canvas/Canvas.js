@@ -10,7 +10,7 @@ import {
   SNAKE_START,
   SPEED
 } from '../../constantes';
-import { usePontos } from '../../contexts/pontosContext';
+import { usePontos } from '../../Contexts/pontosContext';
 
 
 function Canvas() {

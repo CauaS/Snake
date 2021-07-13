@@ -1,6 +1,6 @@
 import React from 'react';
 import Routes from '../src/router';
-import PontosProvider from './contexts/pontosContext.js';
+import PontosProvider from './Contexts/pontosContext.js';
 
 function App() {
   return (
