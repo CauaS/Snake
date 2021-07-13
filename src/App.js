@@ -1,12 +1,12 @@
 import React from 'react';
 import Routes from '../src/router';
-import PontosProvider from './contexts/pontosContext.js';
+import PontuacaoProvider from './providers/pontuacaoProvider';
 
 function App() {
   return (
-    <PontosProvider>
+    <PontuacaoProvider>
       <Routes />
-    </PontosProvider>
+    </PontuacaoProvider>
   )
 }
 

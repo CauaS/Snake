@@ -10,31 +10,26 @@ import {
   SNAKE_START,
   SPEED
 } from '../../constantes';
-import { usePontos } from '../../contexts/pontosContext';
+import { usePontuacao } from '../../providers/pontuacaoProvider.js';
+import PontuacaoService from '../../services/pontuacaoService';
 
 
-function Canvas() {
+function Canvas({ history }) {
   const canvasRef = useRef(null);
   const [snake, setSnake] = useState(SNAKE_START);
   const [apple, setApple] = useState(APPLE_START);
   const [dir, setDir] = useState([0, -1]); //vai para cima, por que o y = -1
   const [speed, setSpeed] = useState(800);
   const [gameOver, setGameOver] = useState(false);
-  const { pontos, setPontos } = usePontos()
+  const { pontuacao, setPontuacao } = usePontuacao()
+
 
   useInterval(() => jogo(), speed);
-
-  const iniciarJogo = () => {
-    setSnake(SNAKE_START);
-    setApple(APPLE_START);
-    setDir([0, -1]);
-    setSpeed(SPEED);
-    setGameOver(false);
-  }
 
   const finalizarJogo = () => {
     setSpeed(null);
     setGameOver(true);
+    PontuacaoService.insertPontuacao(pontuacao);
   }
 
   const movimentarCobra = ({ keyCode }) => { keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]); }
@@ -61,7 +56,7 @@ function Canvas() {
 
   const veriricarColisaoComMaca = novaCobra => {
     if (novaCobra[0][0] === apple[0] && novaCobra[0][1] === apple[1]) {
-      setPontos(pontos + 1);
+      setPontuacao({ ...pontuacao, Pontos: pontuacao.Pontos + 1 });
       if (speed !== 100) setSpeed(speed => speed - 100);
 
       let novaMaca = criarMaca();
@@ -85,8 +80,10 @@ function Canvas() {
 
     copiaCobra.unshift(novaCobraCabeca); // adiciona a cabeça da cobra no inicio do array;
     // copiaCobra.pop();// remove o ultimo elemento da cobra;
-    if (verificarColisao(novaCobraCabeca)) finalizarJogo();
-    if (!veriricarColisaoComMaca(copiaCobra)) copiaCobra.pop(); // se não houve colisão com a maça, retira uma part da cauda da cobra
+    if (verificarColisao(novaCobraCabeca))
+      finalizarJogo();
+    if (!veriricarColisaoComMaca(copiaCobra))
+      copiaCobra.pop(); // se não houve colisão com a maça, retira uma part da cauda da cobra
 
     setSnake(copiaCobra);// atualiza Snakes
   };
