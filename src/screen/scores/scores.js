@@ -22,7 +22,6 @@ const Scores = () => {
         ))
     }
 
-    debugger
 
     return (
         <div>
