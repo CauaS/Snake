@@ -3,14 +3,20 @@
     justify-content: space-around; 
     align-items: center;
 
-    background-color: #F5F5F5;
+    background-color: #b5e48c;
 
     height: 100vh;
+    min-height: 590px;
+
+    background: url('https://png.pngtree.com/thumb_back/fw800/back_our/20190619/ourmid/pngtree-green-bamboo-background-template-image_133079.jpg');
+
+    height: 100vh;
+    background-size: 100% 100%;
 }
 
 .pontuacao {
-    height: 70%;
-    width: 22%;
+    height: 80%;
+    width: 18%;
     background-color: #fff;
 
     border-radius: 5px;
@@ -21,23 +27,22 @@
     flex-direction: column;
 
     padding: 10px;
-
-    flex-shrink: 1  ;
 }
 
 .info {
     display: flex;
-    flex: 1;
     align-items: center;
     justify-content: center;
 
     flex-direction: column;
 
-    height: 100px;
+    height: 20%;
 }
 
 .info img {
-    border-radius: 50px;
+    border-radius: 40px;
+    width: 60%;
+    height: 70%;
 }
 
 .info h3 {
@@ -45,6 +50,26 @@
     font-family: Comic Sans MS, Comic Sans, cursive;
 }
 
-.info h2s {
+.info h2 {
     font-family: Comic Sans MS, Comic Sans, cursive;
+}
+
+
+@media screen and (max-width: 1195px) {
+    .game-container {
+        flex-direction: column
+    }
+
+    .pontuacao {
+        width: 90%;
+        margin-bottom: 30px;
+        flex-direction: row;
+        height: 30%;
+        margin-top: 20%;
+    }
+
+    .info {
+        width: 100%;
+        height: 100%;
+    }
 }

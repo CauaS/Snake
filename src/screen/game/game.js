@@ -5,7 +5,7 @@ import Canvas from '../canvas/Canvas';
 import { usePontuacao } from '../../providers/pontuacaoProvider.js';
 
 function Game(){
-    const {pontuacao} = usePontuacao();
+    const { pontuacao } = usePontuacao();
     
     return (
         <div className="game-container">

@@ -22,8 +22,6 @@ const Scores = () => {
         ))
     }
 
-    debugger
-
     return (
         <div>
             <h1>Leader Boards</h1>

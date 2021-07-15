@@ -89,7 +89,7 @@ function Canvas({ history }) {
   };
 
   const criaCobra = (snake, context) => {
-    context.fillStyle = "lightgreen"; //cor da cobra
+    context.fillStyle = "#fff"; //cor da cobra
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1, 50, 50)); // tamanho
   }
 
@@ -101,6 +101,14 @@ function Canvas({ history }) {
     }, false);
     macaImagem.src = 'https://i.pinimg.com/originals/a1/ee/97/a1ee9796415e11f066f081f238a3a184.png';
   }
+
+  const iniciarJogo = () => {
+    setSnake(SNAKE_START);
+    setApple(APPLE_START);
+    setDir([0, -1]);
+    setSpeed(SPEED);
+    setGameOver(false);
+  };
 
   useEffect(() => {
     window.addEventListener('keydown', movimentarCobra);
@@ -129,18 +137,16 @@ function Canvas({ history }) {
       <canvas
         className="canvas"
         style={{
-          backgroundImage: 'url(https://media.istockphoto.com/vectors/green-grass-texture-background-vector-id514767984?b=1&k=6&m=514767984&s=612x612&w=0&h=5Z-HKBRKfZG3nP1h4mzClKE7lMHrQmPgXej-5QfpydU=)'
+          backgroundImage: 'url(https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/uh59Wh0/videoblocks-falling-autumn-green-leaves-video-motion-graphics-animation-background-loop-hd_ry3dkf3uq_thumbnail-1080_05.png)',
+          backgroundSize:'100% 100%'
         }}
         ref={canvasRef}
         width={`${CANVAS_SIZE.canvasWidth}px`}
         height={`${CANVAS_SIZE.canvasHeight}px`}
       />
-      {gameOver && <div> Game Over! </div>}
-      {/* <div>
-        <button onClick={iniciarJogo}> Iniciar o jogo</button>
-
-        <h1>{score}</h1>
-      </div> */}
+      <div>
+        { gameOver && <button  onClick={iniciarJogo}> Jogar novamente!</button>}
+      </div>
     </div>
   )
 

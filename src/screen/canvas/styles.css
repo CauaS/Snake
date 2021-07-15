@@ -2,3 +2,32 @@
     border-radius: 10px;
     border: 1px solid black, 
 }
+
+button {
+    width: 100%;
+    height: 50px;
+    background: #fff;
+
+    padding: 0;
+    border: none;
+
+    border-radius: 10px;
+    border: 5px solid black;
+
+    text-transform: uppercase;
+    font-family: Comic Sans MS, Comic Sans, cursive;
+	font-size: 1.4em;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+
+    transition: 0.5s;
+
+    cursor: pointer;
+
+}
+
+button:hover {
+    opacity: 1;
+    color: #52b69a;
+    border: 5px solid #52b69a;
+}

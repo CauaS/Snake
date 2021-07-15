@@ -3,7 +3,6 @@ import './styles.css';
 import { usePontuacao } from '../../providers/pontuacaoProvider.js'
 
 function Login({ history }) {
-    //const [apelido, setApelido] = useState('');
     const [apelido, setApelido] = useState('')
     const { pontuacao, setPontuacao } = usePontuacao()
 
