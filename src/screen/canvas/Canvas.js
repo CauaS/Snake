@@ -11,6 +11,7 @@ import {
   SPEED
 } from '../../constantes';
 import { usePontuacao } from '../../providers/pontuacaoProvider.js';
+import { useGameStatus } from '../../providers/gameStatusProvider';
 import PontuacaoService from '../../services/pontuacaoService';
 
 
@@ -21,7 +22,8 @@ function Canvas({ history }) {
   const [dir, setDir] = useState([0, -1]); //vai para cima, por que o y = -1
   const [speed, setSpeed] = useState(800);
   const [gameOver, setGameOver] = useState(false);
-  const { pontuacao, setPontuacao } = usePontuacao()
+  const { pontuacao, setPontuacao } = usePontuacao();
+  const {setGameOverStatus } = useGameStatus();
 
 
   useInterval(() => jogo(), speed);
@@ -30,6 +32,7 @@ function Canvas({ history }) {
     setSpeed(null);
     setGameOver(true);
     PontuacaoService.insertPontuacao(pontuacao);
+    setGameOverStatus(true);
   }
 
   const movimentarCobra = ({ keyCode }) => { keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]); }
@@ -108,6 +111,7 @@ function Canvas({ history }) {
     setDir([0, -1]);
     setSpeed(SPEED);
     setGameOver(false);
+    setGameOverStatus(false);
   };
 
   useEffect(() => {
@@ -119,12 +123,8 @@ function Canvas({ history }) {
 
 
     criaCobra(snake, context);
-    // context.fillStyle = "lightgreen"; //cor da cobra
-    // snake.forEach(([x, y]) => context.roundRect(x, y, 1, 1, 50, 50)); // tamanho
 
     criaMaca(context, apple);
-    // context.fillStyle =v "red"; // para a maçã
-    // context.fillRect(apple[0], apple[1], 1, 1); //tamanho
     return () => {
       window.removeEventListener('keydown', movimentarCobra);
     };
@@ -133,7 +133,7 @@ function Canvas({ history }) {
 
 
   return (
-    <div>
+    <div style={{ display: 'flex', justifyContent:"center", alignItems:'center', flexDirection:'column'}}>
       <canvas
         className="canvas"
         style={{
@@ -145,7 +145,7 @@ function Canvas({ history }) {
         height={`${CANVAS_SIZE.canvasHeight}px`}
       />
       <div>
-        { gameOver && <button  onClick={iniciarJogo}> Jogar novamente!</button>}
+        { gameOver && <button className="btn-jogar-novamente" onClick={iniciarJogo}> Jogar novamente!</button>}
       </div>
     </div>
   )

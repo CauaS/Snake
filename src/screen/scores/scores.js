@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PontuacaoService from "../../services/pontuacaoService.js";
 
+import './styles.css';
 
 const Scores = () => {
     const [pontuacoes, setPontuacoes] = useState([])
@@ -15,16 +16,19 @@ const Scores = () => {
 
     const getPontuacoesTemplate = () => {
         return pontuacoes.map((p,index) => (
-            <div key={index}>
-                <h2>Jogador : {p.Apelido}</h2>
-                <p>Pontuação : {p.Pontos}</p>
+            <div 
+                className="jogador-score" 
+                key={index}
+            >
+                <span className="jogador-nome">Jogador : {p.Apelido}</span>
+                <p className="jogador-pontos">Pontuação : {p.Pontos}</p>
             </div>
         ))
     }
 
     return (
-        <div>
-            <h1>Leader Boards</h1>
+        <div className="scores-container">
+            <h1 style={{ color: 'green'}}>Os Melhores</h1>
                 {
                     getPontuacoesTemplate()
                 }
