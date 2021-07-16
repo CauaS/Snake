@@ -24,11 +24,18 @@ const DIRECTIONS = {
   39: right 
 };
 
+const OBJETIVOS=[
+  15,
+  25,
+  50
+]
+
 export {
   CANVAS_SIZE,
   SNAKE_START,
   APPLE_START,
   SCALE,
   SPEED,
-  DIRECTIONS
+  DIRECTIONS,
+  OBJETIVOS
 };

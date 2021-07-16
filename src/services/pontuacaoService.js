@@ -11,7 +11,7 @@ const PontuacaoService = {
     async insertPontuacao(pontuacao) {
         try {
             const placares = await this.getPontuacoes('asc')
-            const deveInserir = false
+            let deveInserir = false
             if (placares.length === 5) {
                 for (let placar of placares) {
                     if (placar.Pontos < pontuacao.Pontos) {
@@ -21,7 +21,7 @@ const PontuacaoService = {
                     }
                 }
             }
-            if(deveInserir)
+            if(deveInserir || placares.length < 5)
                 await ref.doc(`${pontuacao.Apelido}${pontuacao.Pontos}`).set(pontuacao)
 
         } catch (e) {

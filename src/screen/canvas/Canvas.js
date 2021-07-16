@@ -8,39 +8,39 @@ import {
   DIRECTIONS,
   SCALE,
   SNAKE_START,
-  SPEED
+  SPEED,
+  OBJETIVOS
 } from '../../constantes';
 import { usePontuacao } from '../../providers/pontuacaoProvider.js';
 import { useGameStatus } from '../../providers/gameStatusProvider';
 import PontuacaoService from '../../services/pontuacaoService';
+import { chewSound } from '../../assets/audio/index.js'
 
-import { level1, level2 , level3 } from '../../assets/images/index';
+import { imagens } from '../../assets/images/index';
 
 
 function Canvas({ history }) {
+  const biteSound = new Audio(chewSound);
   const canvasRef = useRef(null);
+  const [objetivoIndex, setObjetivoIndex] = useState(0)
   const [snake, setSnake] = useState(SNAKE_START);
   const [apple, setApple] = useState(APPLE_START);
   const [dir, setDir] = useState([0, -1]); //vai para cima, por que o y = -1
   const [speed, setSpeed] = useState(800);
   const [gameOver, setGameOver] = useState(false);
-  const [imagemLevel, setImagemLevel] = useState(level1);
+  const [imagemLevel, setImagemLevel] = useState(imagens[objetivoIndex]);
   const { pontuacao, setPontuacao } = usePontuacao();
-  const { setGameOverStatus, setObjetivo, setLevel } = useGameStatus();
+  const { setGameOverStatus, setObjetivo, setLevel, objetivo } = useGameStatus();
 
   useInterval(() => jogo(), speed);
 
-  
+
   const verificaLevel = () => {
-    if(pontuacao.Pontos >= 5 ) {
-      setObjetivo(10);
-      setImagemLevel(level2);
-      setLevel(2);
-    }
-    if(pontuacao.Pontos >= 10 ) {
-      setObjetivo(15);
-      setImagemLevel(level3);
-      setLevel(3);
+    if (pontuacao.Pontos >= objetivo && objetivo != OBJETIVOS[2]) {
+      setObjetivo(OBJETIVOS[objetivoIndex]);
+      setImagemLevel(imagens[objetivoIndex]);
+      setLevel(objetivoIndex + 1);
+      setObjetivoIndex(objetivoIndex + 1)
     }
   }
 
@@ -59,7 +59,8 @@ function Canvas({ history }) {
     setSpeed(SPEED);
     setGameOver(false);
     setGameOverStatus(gameOver);
-    setImagemLevel(level1);
+    setImagemLevel(imagens[objetivoIndex]);
+    setLevel(0);
 
     setPontuacao({ ...pontuacao, Pontos: 0 });
   };
@@ -87,6 +88,7 @@ function Canvas({ history }) {
 
   const veriricarColisaoComMaca = novaCobra => {
     if (novaCobra[0][0] === apple[0] && novaCobra[0][1] === apple[1]) {
+      biteSound.play()
       setPontuacao({ ...pontuacao, Pontos: pontuacao.Pontos + 1 });
       if (speed !== 100) setSpeed(speed => speed - 100);
 
@@ -120,9 +122,12 @@ function Canvas({ history }) {
   };
 
   const criaCobra = (snake, context) => {
-    if(pontuacao.Pontos >= 0 ) context.fillStyle = "#fff"; //cor da cobra
-    if(pontuacao.Pontos >= 5 ) context.fillStyle = "red"; //cor da cobra
-    if(pontuacao.Pontos >= 10 ) context.fillStyle = "black"; //cor da cobra
+    if (pontuacao.Pontos <= OBJETIVOS[0])
+      context.fillStyle = "#fff"; //cor da cobra
+    else if (pontuacao.Pontos <= OBJETIVOS[1])
+      context.fillStyle = "red"; //cor da cobra
+    else if (pontuacao.Pontos <= OBJETIVOS[2])
+      context.fillStyle = "black"; //cor da cobra
 
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1, 50, 50)); // tamanho
   }
@@ -135,12 +140,14 @@ function Canvas({ history }) {
     }, false);
     macaImagem.src = 'https://i.pinimg.com/originals/a1/ee/97/a1ee9796415e11f066f081f238a3a184.png';
   }
-  
+
   useEffect(() => {
-    return function limparPontuacao(){
+    return function limparPontuacao() {
       setPontuacao({ ...pontuacao, Pontos: 0 });
+      setLevel(0)
+      setObjetivo()
     }
-  },[]);
+  }, []);
 
   useEffect(() => {
     setGameOverStatus(gameOver)
@@ -158,23 +165,23 @@ function Canvas({ history }) {
       window.removeEventListener('keydown', movimentarCobra);
     };
   },
-  [snake, apple, gameOver, setGameOverStatus]);
+    [snake, apple, gameOver, setGameOverStatus]);
 
 
   return (
-    <div style={{ display: 'flex', justifyContent:"center", alignItems:'center', flexDirection:'column'}}>
+    <div style={{ display: 'flex', justifyContent: "center", alignItems: 'center', flexDirection: 'column' }}>
       <canvas
         className="canvas"
         style={{
           backgroundImage: `url(${imagemLevel})`,
-          backgroundSize:'100% 100%'
+          backgroundSize: '100% 100%'
         }}
         ref={canvasRef}
         width={`${CANVAS_SIZE[0]}px`}
         height={`${CANVAS_SIZE[1]}px`}
       />
       <div>
-        { gameOver && <button className="btn-jogar-novamente" onClick={iniciarJogo}> Jogar novamente!</button>}
+        {gameOver && <button className="btn-jogar-novamente" onClick={iniciarJogo}> Jogar novamente!</button>}
       </div>
     </div>
   )
