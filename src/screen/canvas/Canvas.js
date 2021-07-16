@@ -32,21 +32,31 @@ function Canvas({ history }) {
     setSpeed(null);
     setGameOver(true);
     PontuacaoService.insertPontuacao(pontuacao);
-    setGameOverStatus(true);
+    setGameOverStatus(gameOver);
   }
 
+  const iniciarJogo = () => {
+    setSnake(SNAKE_START);
+    setApple(APPLE_START);
+    setDir([0, -1]);
+    setSpeed(SPEED);
+    setGameOver(false);
+    setGameOverStatus(gameOver);
+
+    setPontuacao({ ...pontuacao, Pontos: 0 });
+  };
   const movimentarCobra = ({ keyCode }) => { keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]); }
 
-  const criarMaca = () => apple.map((_, i) => Math.floor(Math.random() * (CANVAS_SIZE.canvasHeight + CANVAS_SIZE.canvasWidth) / SCALE)); // gera um novo lugar para a maça, dentor o canvas size;
+  const criarMaca = () => apple.map((_, i) => Math.floor(Math.random() * (CANVAS_SIZE[i]) / SCALE)); // gera um novo lugar para a maça, dentor o canvas size;
 
   const verificarColisao = (parteCobra, cobra = snake) => {
     /*
     parteCobra[0] = cabela * SCALE(para ter o valor correto) >= ao CANVAS_SIZE[0] = x
     {...}
     */
-    if (parteCobra[0] * SCALE >= CANVAS_SIZE.canvasWidth ||
+    if (parteCobra[0] * SCALE >= CANVAS_SIZE[0] ||
       parteCobra[0] < 0 ||
-      parteCobra[1] * SCALE >= CANVAS_SIZE.canvasHeight ||
+      parteCobra[1] * SCALE >= CANVAS_SIZE[1] ||
       parteCobra[1] < 0) return true;
 
     //verifica se a cabeça a cobra colidiu nela mesma.
@@ -105,21 +115,13 @@ function Canvas({ history }) {
     macaImagem.src = 'https://i.pinimg.com/originals/a1/ee/97/a1ee9796415e11f066f081f238a3a184.png';
   }
 
-  const iniciarJogo = () => {
-    setSnake(SNAKE_START);
-    setApple(APPLE_START);
-    setDir([0, -1]);
-    setSpeed(SPEED);
-    setGameOver(false);
-    setGameOverStatus(false);
-  };
-
   useEffect(() => {
+    setGameOverStatus(gameOver)
     window.addEventListener('keydown', movimentarCobra);
 
     const context = canvasRef.current.getContext('2d');
     context.setTransform(SCALE, 0, 0, SCALE, 0, 0);
-    context.clearRect(0, 0, CANVAS_SIZE.canvasWidth, CANVAS_SIZE.canvasHeight); // limpa o campo do jogo
+    context.clearRect(0, 0, CANVAS_SIZE[0], CANVAS_SIZE[1]); // limpa o campo do jogo
 
 
     criaCobra(snake, context);
@@ -129,7 +131,7 @@ function Canvas({ history }) {
       window.removeEventListener('keydown', movimentarCobra);
     };
   },
-    [snake, apple, gameOver]);
+  [snake, apple, gameOver, setGameOverStatus]);
 
 
   return (
@@ -141,8 +143,8 @@ function Canvas({ history }) {
           backgroundSize:'100% 100%'
         }}
         ref={canvasRef}
-        width={`${CANVAS_SIZE.canvasWidth}px`}
-        height={`${CANVAS_SIZE.canvasHeight}px`}
+        width={`${CANVAS_SIZE[0]}px`}
+        height={`${CANVAS_SIZE[1]}px`}
       />
       <div>
         { gameOver && <button className="btn-jogar-novamente" onClick={iniciarJogo}> Jogar novamente!</button>}
