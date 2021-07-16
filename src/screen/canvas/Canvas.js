@@ -14,6 +14,8 @@ import { usePontuacao } from '../../providers/pontuacaoProvider.js';
 import { useGameStatus } from '../../providers/gameStatusProvider';
 import PontuacaoService from '../../services/pontuacaoService';
 
+import { level1, level2 , level3 } from '../../assets/images/index';
+
 
 function Canvas({ history }) {
   const canvasRef = useRef(null);
@@ -22,11 +24,26 @@ function Canvas({ history }) {
   const [dir, setDir] = useState([0, -1]); //vai para cima, por que o y = -1
   const [speed, setSpeed] = useState(800);
   const [gameOver, setGameOver] = useState(false);
+  const [imagemLevel, setImagemLevel] = useState(level1);
   const { pontuacao, setPontuacao } = usePontuacao();
-  const {setGameOverStatus } = useGameStatus();
+  const { setGameOverStatus, setObjetivo, setLevel } = useGameStatus();
 
 
   useInterval(() => jogo(), speed);
+
+  
+  const verificaLevel = () => {
+    if(pontuacao.Pontos >= 5 ) {
+      setObjetivo(10);
+      setImagemLevel(level2);
+      setLevel(2);
+    }
+    if(pontuacao.Pontos >= 10 ) {
+      setObjetivo(15);
+      setImagemLevel(level3);
+      setLevel(3);
+    }
+  }
 
   const finalizarJogo = () => {
     setSpeed(null);
@@ -42,6 +59,7 @@ function Canvas({ history }) {
     setSpeed(SPEED);
     setGameOver(false);
     setGameOverStatus(gameOver);
+    setImagemLevel(level1);
 
     setPontuacao({ ...pontuacao, Pontos: 0 });
   };
@@ -102,7 +120,10 @@ function Canvas({ history }) {
   };
 
   const criaCobra = (snake, context) => {
-    context.fillStyle = "#fff"; //cor da cobra
+    if(pontuacao.Pontos >= 0 ) context.fillStyle = "#fff"; //cor da cobra
+    if(pontuacao.Pontos >= 5 ) context.fillStyle = "red"; //cor da cobra
+    if(pontuacao.Pontos >= 10 ) context.fillStyle = "black"; //cor da cobra
+
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1, 50, 50)); // tamanho
   }
 
@@ -123,7 +144,7 @@ function Canvas({ history }) {
     context.setTransform(SCALE, 0, 0, SCALE, 0, 0);
     context.clearRect(0, 0, CANVAS_SIZE[0], CANVAS_SIZE[1]); // limpa o campo do jogo
 
-
+    verificaLevel();
     criaCobra(snake, context);
 
     criaMaca(context, apple);
@@ -139,7 +160,7 @@ function Canvas({ history }) {
       <canvas
         className="canvas"
         style={{
-          backgroundImage: 'url(https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/uh59Wh0/videoblocks-falling-autumn-green-leaves-video-motion-graphics-animation-background-loop-hd_ry3dkf3uq_thumbnail-1080_05.png)',
+          backgroundImage: `url(${imagemLevel})`,
           backgroundSize:'100% 100%'
         }}
         ref={canvasRef}

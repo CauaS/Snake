@@ -8,7 +8,7 @@ import { useGameStatus } from '../../providers/gameStatusProvider.js';
 
 function Game({ history }){
     const { pontuacao } = usePontuacao();
-    const { gameOverStatus } = useGameStatus();
+    const { gameOverStatus, objetivo, level } = useGameStatus();
     
     return (
         <div className="game-container">
@@ -35,8 +35,8 @@ function Game({ history }){
                 <div className="game-info">
                     <div className="game-info-pontos">
                         <GameInfo infomation={pontuacao.Pontos} description="Pts"/>
-                        <GameInfo infomation={10} description="Obj"/>
-                        <GameInfo infomation={1} description="Lvl"/>    
+                        <GameInfo infomation={objetivo} description="Obj"/>
+                        <GameInfo infomation={level} description="Lvl"/>    
                     </div>
                     <div onClick={() => history.push('/scores')}>
                         <GameInfo imageUrl={'https://thumbs.gfycat.com/AssuredRaggedInvisiblerail-small.gif'}/>    
