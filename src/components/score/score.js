@@ -1,6 +1,9 @@
 import React from "react"
 import { silver, gold } from "../../assets/imagensPodio"
-import './styles.css'
+import './styles.css';
+import { imagens } from '../../assets/images/index';
+
+
 const Score = (props) => {
     const getCrown = () => {
         switch (props.index) {
@@ -10,7 +13,7 @@ const Score = (props) => {
         }
     }
     return (
-        <div className="jogador-score">
+        <div className="jogador-score" style={{ background: `url(${imagens[3]})`}}>
             <div style={{
                 width: '60%',
                 display: "flex",
