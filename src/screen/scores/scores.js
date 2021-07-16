@@ -3,6 +3,9 @@ import PontuacaoService from "../../services/pontuacaoService.js";
 
 import './styles.css';
 
+import { silver } from "../../assets/imagensPodio/index.js";
+import Score from "../../components/score/score.js";
+
 const Scores = () => {
     const [pontuacoes, setPontuacoes] = useState([])
     
@@ -16,13 +19,7 @@ const Scores = () => {
 
     const getPontuacoesTemplate = () => {
         return pontuacoes.map((p,index) => (
-            <div 
-                className="jogador-score" 
-                key={index}
-            >
-                <span className="jogador-nome">Jogador : {p.Apelido}</span>
-                <p className="jogador-pontos">Pontuação : {p.Pontos}</p>
-            </div>
+            <Score key={index} player={p} index={index}></Score>
         ))
     }
 
