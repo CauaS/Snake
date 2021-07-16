@@ -28,7 +28,6 @@ function Canvas({ history }) {
   const { pontuacao, setPontuacao } = usePontuacao();
   const { setGameOverStatus, setObjetivo, setLevel } = useGameStatus();
 
-
   useInterval(() => jogo(), speed);
 
   
@@ -45,10 +44,11 @@ function Canvas({ history }) {
     }
   }
 
-  const finalizarJogo = () => {
+
+  const finalizarJogo = async () => {
     setSpeed(null);
     setGameOver(true);
-    PontuacaoService.insertPontuacao(pontuacao);
+    await PontuacaoService.insertPontuacao(pontuacao);
     setGameOverStatus(gameOver);
   }
 
@@ -103,7 +103,7 @@ function Canvas({ history }) {
     return false;
   }
 
-  const jogo = () => {
+  const jogo = async () => {
     const copiaCobra = JSON.parse(JSON.stringify(snake)); // cobra inteira
 
     //snake[0][0] -> cabeça (+) dir[0] ->  adiciona a direção apra a cabeça ( dir[0] = x)
@@ -112,7 +112,7 @@ function Canvas({ history }) {
     copiaCobra.unshift(novaCobraCabeca); // adiciona a cabeça da cobra no inicio do array;
     // copiaCobra.pop();// remove o ultimo elemento da cobra;
     if (verificarColisao(novaCobraCabeca))
-      finalizarJogo();
+      await finalizarJogo();
     if (!veriricarColisaoComMaca(copiaCobra))
       copiaCobra.pop(); // se não houve colisão com a maça, retira uma part da cauda da cobra
 
@@ -135,6 +135,12 @@ function Canvas({ history }) {
     }, false);
     macaImagem.src = 'https://i.pinimg.com/originals/a1/ee/97/a1ee9796415e11f066f081f238a3a184.png';
   }
+  
+  useEffect(() => {
+    return function limparPontuacao(){
+      setPontuacao({ ...pontuacao, Pontos: 0 });
+    }
+  },[]);
 
   useEffect(() => {
     setGameOverStatus(gameOver)
